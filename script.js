@@ -233,7 +233,7 @@ addEventListener("keydown", (event) => {
 function mobileControles() {
   let startX = 0;
   let startY = 0;
-  const threshold = 50; // Minimum pixels to be considered a swipe
+  const threshold = 30; // Minimum pixels to be considered a swipe
 
   window.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
@@ -266,3 +266,4 @@ function mobileControles() {
 }
 
 mobileControles()
+
