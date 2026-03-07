@@ -230,21 +230,39 @@ addEventListener("keydown", (event) => {
   }
 });
 
-function mobileControles(){
+function mobileControles() {
+  let startX = 0;
+  let startY = 0;
+  const threshold = 50; // Minimum pixels to be considered a swipe
 
-  if(board.clientWidth<400){
-     mobileControlebtn.style.display = 'flex'
-  }
-  else (mobileControlebtn.style.display = 'none')
- 
-  mobileControleKey.forEach((elem) => {
-      elem.addEventListener('click',(e)=>{
-         if(e.target.id==='up') direction = 'up'
-         else if(e.target.id==='down') direction = 'down'
-         else if(e.target.id==='left') direction = 'left'
-         else if(e.target.id==='right') direction = 'right'
-      })
-  })
-  
+  window.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+
+  window.addEventListener("touchend", (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+
+    const diffX = startX - endX;
+    const diffY = startY - endY;
+
+    // find if the swipe was horizontal or vertical
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Horizontal swipe
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) direction = "left";
+        else direction = "right";
+      }
+    } else {
+      // Vertical swipe
+      if (Math.abs(diffY) > threshold) {
+        if (diffY > 0) direction = "up";
+        else direction = "down";
+      }
+    }
+    if (diffX > 0 && direction !== "right") direction = "left";
+  });
 }
+
 mobileControles()
