@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main>
+      <section>
+        <div class="infos">
+          <div class="info">
+            <h3>
+              High Score:
+              <span id="high-score">0</span>
+            </h3>
+          </div>
+          <div class="info">
+            <h3>
+              Score:
+              <span class="score">0</span>
+            </h3>
+          </div>
+          <div class="info">
+            <h3>
+              Time:
+              <span class="time">00-00</span>
+            </h3>
+          </div>
+        </div>
+        <div class="board"></div>
+        <div class="controls-btns">
+             <div class="keys">
+              <div class="mobile-key key" id="up">↑</div>
+              <div class="mobile-key key" id="down">↓</div>
+              <div class="mobile-key key" id="left">←</div>
+              <div class="mobile-key key" id="right">→</div>
+            </div>
+        </div>
+      </section>
+      <div class="modal">
+        <div class="start-game card">
+          <div class="logo">🐍</div>
+
+          <h1 class="game-title">SNAKE<span>.</span></h1>
+
+          <p class="subtitle">CLASSIC EVOLUTION</p>
+
+          <div class="controls">
+            <h3>How to Play</h3>
+
+            <div class="keys">
+              <div class="key">↑</div>
+              <div class="key">↓</div>
+              <div class="key">←</div>
+              <div class="key">→</div>
+            </div>
+
+            <p class="controls-text">
+              Use arrow keys to move and collect points
+            </p>
+          </div>
+
+          <button class="btn btn-start">▶ Start Game</button>
+        </div>
+        <div class="game-over card">
+          <span class="session">SESSION ENDED</span>
+
+          <h1 class="title">GAME OVER</h1>
+
+          <p class="subtitle">You hit the wall! Better luck next time.</p>
+
+          <div class="score-card">
+            <span class="score-label">FINAL SCORE</span>
+            <h2 id="final-score">0</h2>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-label">TIME PLAYED</span>
+              <span id="final-time">00:00</span>
+            </div>
+
+            <div class="stat">
+              <span class="stat-label">APPLES EATEN</span>
+              <span class="apples">0</span>
+            </div>
+          </div>
+
+          <button class="btn btn-restart">Restart Game</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
