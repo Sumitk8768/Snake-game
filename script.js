@@ -5,9 +5,8 @@ const modal = document.querySelector(".modal");
 const startGameModal = document.querySelector(".start-game");
 const overGameModal = document.querySelector(".game-over");
 const reStartButton = document.querySelector(".btn-restart");
-const mobileControlebtn = document.querySelector(".controls-btns")
-const mobileControleKey = document.querySelectorAll('.mobile-key')
-
+const mobileControlebtn = document.querySelector(".controls-btns");
+const mobileControleKey = document.querySelectorAll(".mobile-key");
 
 // score elements
 const highScoreElement = document.querySelector("#high-score");
@@ -18,8 +17,8 @@ const finalTime = document.querySelector("#final-time");
 const eatenApple = document.querySelector(".apples");
 
 // sounds
-const eatSound = new Audio("./music/eat.mp3")
-const gameOverSound = new Audio("./music/gameover.mp3")
+const eatSound = new Audio("./music/eat.mp3");
+const gameOverSound = new Audio("./music/gameover.mp3");
 
 // grid settings
 const blockHeight = 30;
@@ -37,10 +36,15 @@ const cols = Math.floor(board.clientWidth / blockWidth);
 
 let intervalId = null;
 let timerInterval = null;
-
+let speed = 300;
 const blocks = [];
-let snake = [{ x: 1, y: 3 }];
-let direction = "right";
+let snake = [
+  { x: 1, y: 5 },
+  { x: 1, y: 4 },
+  { x: 1, y: 3 },
+];
+let nextDirection = "right";
+let currentDirection = "right";
 
 let food = generateFood();
 
@@ -70,28 +74,27 @@ function createBoard() {
 }
 createBoard();
 
-
 // render function
 function render() {
   let head = null;
 
   blocks[`${food.x} - ${food.y}`].classList.add("food");
-  // Head position with direction condition
-  if (direction === "left") {
+  // Head position with nextDirection condition
+  if (nextDirection === "left") {
     head = { x: snake[0].x, y: snake[0].y - 1 };
-  } else if (direction === "right") {
+  } else if (nextDirection === "right") {
     head = { x: snake[0].x, y: snake[0].y + 1 };
-  } else if (direction === "up") {
+  } else if (nextDirection === "up") {
     head = { x: snake[0].x - 1, y: snake[0].y };
-  } else if (direction === "down") {
+  } else if (nextDirection === "down") {
     head = { x: snake[0].x + 1, y: snake[0].y };
   }
 
   // Wall collision
   if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= cols) {
     clearInterval(intervalId);
-    clearInterval(timerInterval)
-    gameOverSound.play()
+    clearInterval(timerInterval);
+    gameOverSound.play();
 
     modal.style.display = "flex";
     startGameModal.style.display = "none";
@@ -108,7 +111,7 @@ function render() {
     clearInterval(intervalId);
     clearInterval(timerInterval);
 
-    gameOverSound.play()
+    gameOverSound.play();
 
     modal.style.display = "flex";
     startGameModal.style.display = "none";
@@ -122,9 +125,9 @@ function render() {
     food = generateFood();
     blocks[`${food.x} - ${food.y}`].classList.add("food");
     snake.unshift(head);
-    
-    eatSound.currentTime = 0
-    eatSound.play()
+
+    eatSound.currentTime = 0;
+    eatSound.play();
 
     score += 10;
     scoreElement.innerText = score;
@@ -158,13 +161,13 @@ function render() {
       left: "rotate(-90deg)",
     };
 
-    headBlock.style.transform = rotations[direction];
+    headBlock.style.transform = rotations[nextDirection];
   }
   makeHeadEye();
 }
 
-function timeInervalfn(){
-   timerInterval = setInterval(() => {
+function timeInervalfn() {
+  timerInterval = setInterval(() => {
     let [min, sec] = time.split("-").map(Number);
 
     if (sec == 59) {
@@ -176,7 +179,7 @@ function timeInervalfn(){
 
     time = `${min}-${sec}`;
     timeElement.innerText = time;
-    finalTime.innerText = time
+    finalTime.innerText = time;
   }, 1000);
 }
 
@@ -184,21 +187,21 @@ startButton.addEventListener("click", () => {
   document.querySelector(".modal").style.display = "none";
   intervalId = setInterval(() => {
     render();
-  }, 300);
-  timeInervalfn()
+  }, speed);
+  timeInervalfn();
 });
 
 reStartButton.addEventListener("click", reStartGame);
 
 function reStartGame() {
   clearInterval(intervalId);
-  clearInterval(timerInterval)
+  clearInterval(timerInterval);
 
   blocks[`${food.x} - ${food.y}`].classList.remove("food");
   snake.forEach((segment) => {
     blocks[`${segment.x} - ${segment.y}`].classList.remove("fill", "head");
   });
-  timeInervalfn()
+  timeInervalfn();
   score = 0;
   time = `00-00`;
   scoreElement.innerText = score;
@@ -209,44 +212,40 @@ function reStartGame() {
   eatenApple.innerText = score / 10;
 
   modal.style.display = "none";
-  direction = "down";
+  nextDirection = "down";
   snake = [{ x: 1, y: 3 }];
   food = generateFood();
   intervalId = setInterval(() => {
     render();
-  }, 300);
+  }, speed);
 }
 
-// Find direction as per Key Pressed
+// Find nextDirection as per Key Pressed
 addEventListener("keydown", (event) => {
   if (event.key === "ArrowDown") {
-    direction = "down";
+    if (nextDirection !== "up") nextDirection = "down";
   } else if (event.key === "ArrowRight") {
-    direction = "right";
+    if (nextDirection !== "left") nextDirection = "right";
   } else if (event.key === "ArrowUp") {
-    direction = "up";
+    if (nextDirection !== "down") nextDirection = "up";
   } else if (event.key === "ArrowLeft") {
-    direction = "left";
+    if (nextDirection !== "right") nextDirection = "left";
   }
 });
 
 function mobileControles() {
+  if (board.clientWidth < 400) {
+    mobileControlebtn.style.display = "flex";
+  } else mobileControlebtn.style.display = "none";
 
-  if(board.clientWidth<400){
-     mobileControlebtn.style.display = 'flex'
-  }
-  else (mobileControlebtn.style.display = 'none')
- 
   mobileControleKey.forEach((elem) => {
-      elem.addEventListener('click',(e)=>{
-         if(e.target.id==='up') direction = 'up'
-         else if(e.target.id==='down') direction = 'down'
-         else if(e.target.id==='left') direction = 'left'
-         else if(e.target.id==='right') direction = 'right'
-      })
-  })
+    elem.addEventListener("click", (e) => {
+      if (e.target.id === "up") nextDirection = "up";
+      else if (e.target.id === "down") nextDirection = "down";
+      else if (e.target.id === "left") nextDirection = "left";
+      else if (e.target.id === "right") nextDirection = "right";
+    });
+  });
 }
-
-mobileControles()
-
+mobileControles();
 
