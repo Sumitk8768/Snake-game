@@ -213,7 +213,11 @@ function reStartGame() {
 
   modal.style.display = "none";
   nextDirection = "down";
-  snake = [{ x: 1, y: 3 }];
+  let snake = [
+  { x: 1, y: 5 },
+  { x: 1, y: 4 },
+  { x: 1, y: 3 },
+];
   food = generateFood();
   intervalId = setInterval(() => {
     render();
@@ -248,4 +252,5 @@ function mobileControles() {
   });
 }
 mobileControles();
+
 
